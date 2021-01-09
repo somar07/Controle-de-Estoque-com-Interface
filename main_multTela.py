@@ -9,8 +9,7 @@ from tela_inicial import Tela_inicial
 from tela_cadastro_funcionario import Tela_cadastro_funcionario
 from tela_cadastro_cliente import Tela_cadastro_cliente
 
-from pessoa import Pessoa, Cadastra_pessoa
-
+from cadastra_pessoa import *
 
 
 class Ui_main(QtWidgets.QWidget):
@@ -52,67 +51,49 @@ class Main(QMainWindow, Ui_main):
 		self.tela_inicial.pushButton_3.clicked.connect(QtCore.QCoreApplication.instance().quit)
 
 		# Interação tela cadastra funcionario
+		self.tela_cadastro_funcionario.pushButton.clicked.connect(self.btnCadastra_func)
 		self.tela_cadastro_funcionario.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(0))
 
+		# Interação tela cadastra cliente
+		self.tela_cadastro_cliente.pushButton.clicked.connect(self.btnCadastra_cliente)
+		self.tela_cadastro_cliente.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(0))
 
-
-	# 	self.tela_cadastro.pushButton.clicked.connect(self.btnCadastra)
-	# 	self.tela_cadastro.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(0))
-
-	# 	self.tela_busca.pushButton.clicked.connect(self.btnBusca)
-	# 	self.tela_busca.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(0))
-
-	# def abrirTelaCadastro(self):
-	# 	self.QtStack.setCurrentIndex(1)
-
-	# def abrirTelaBusca(self):
-	# 	if(self.cadastro.lista_pessoas != []):
-	# 		self.QtStack.setCurrentIndex(2)
-	# 	else:
-	# 		QMessageBox.information(None, 'Busca', 'Não existem pessoas cadastradas')
-
-	# def btnCadastra(self):
-	# 	nome = self.tela_cadastro.lineEdit.text()
-	# 	cpf = self.tela_cadastro.lineEdit_2.text()
-	# 	end = self.tela_cadastro.lineEdit_3.text()
-	# 	nasc = self.tela_cadastro.lineEdit_4.text()
-
-	# 	if(not(nome == '' or cpf == '' or end == '' or nasc == '')):
-	# 		pessoa = Pessoa(nome, cpf, end, nasc);
-
-	# 		if(self.cadastro.cadastra(pessoa)):
-	# 			QMessageBox.information(None, 'Cadastro', 'Cadastro realizado com sucesso')
-	# 			self.tela_cadastro.lineEdit.setText('')
-	# 			self.tela_cadastro.lineEdit_2.setText('')
-	# 			self.tela_cadastro.lineEdit_3.setText('')
-	# 			self.tela_cadastro.lineEdit_4.setText('')
-	# 		else:
-	# 			QMessageBox.information(None, 'Cadastro', 'CPF informado já cadastrado')
-       
-	# 	else:
-	# 		QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
+	def btnCadastra_func(self):
+		nome = self.tela_cadastro_funcionario.lineEdit.text()
+		cpf = self.tela_cadastro_funcionario.lineEdit_2.text()
+		salario = self.tela_cadastro_funcionario.lineEdit_3.text()
 		
-	# def btnBusca(self):
-	# 	cpf = self.tela_busca.lineEdit.text()
+		if(not(nome == '' or cpf == '' or salario == '')):
+			funcionario = Funcionario(nome, cpf, salario)
 
-	# 	if(cpf != ''):
-	# 		pessoa = self.cadastro.busca(cpf)
-			
-	# 		if(pessoa != None):
+			if(self.cadastra_pessoa.cadastra(funcionario)):
+				QMessageBox.information(None, 'Cadastro', 'Cadastro realizado com sucesso')
+				self.tela_cadastro_funcionario.lineEdit.setText('')
+				self.tela_cadastro_funcionario.lineEdit_2.setText('')
+				self.tela_cadastro_funcionario.lineEdit_3.setText('')
+			else:
+				QMessageBox.information(None, 'Cadastro', 'CPF informado já cadastrado')
+       
+		else:
+			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
+	
 
-	# 			self.tela_busca.lineEdit.setText('')
-	# 			self.tela_busca.lineEdit_2.setText(pessoa.nome)
-	# 			self.tela_busca.lineEdit_3.setText(pessoa.cpf)
-	# 			self.tela_busca.lineEdit_4.setText(pessoa.endereco)
-	# 			self.tela_busca.lineEdit_5.setText(pessoa.data_nasc)
+	def btnCadastra_cliente(self):
+		nome = self.tela_cadastro_cliente.lineEdit.text()
+		cpf = self.tela_cadastro_cliente.lineEdit_2.text()
+		
+		if(not(nome == '' or cpf == '')):
+			cliente = Pessoa(nome, cpf)
 
-	# 		else:
- #  				QMessageBox.information(None, 'Busca', 'Dados não encotrado')
-	# 	else:
- # 			QMessageBox.information(None, 'Busca', 'Preencha o campo para buscar')
-            
-
-
+			if(self.cadastra_pessoa.cadastra(cliente)):
+				QMessageBox.information(None, 'Cadastro', 'Cadastro realizado com sucesso')
+				self.tela_cadastro_cliente.lineEdit.setText('')
+				self.tela_cadastro_cliente.lineEdit_2.setText('')
+			else:
+				QMessageBox.information(None, 'Cadastro', 'CPF informado já cadastrado')
+       
+		else:
+			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
