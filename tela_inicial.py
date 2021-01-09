@@ -2,14 +2,14 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 
 
-class tela_inicial(object):
+class Tela_inicial(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(640, 480)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(230, 40, 141, 31))
+        self.label.setGeometry(QtCore.QRect(260, 50, 141, 31))
         font = QtGui.QFont()
         font.setFamily("Roboto")
         font.setPointSize(16)
@@ -18,21 +18,21 @@ class tela_inicial(object):
         self.label.setFont(font)
         self.label.setObjectName("label")
         self.pushButton = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton.setGeometry(QtCore.QRect(240, 110, 101, 21))
+        self.pushButton.setGeometry(QtCore.QRect(270, 140, 101, 21))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
         self.pushButton.setFont(font)
         self.pushButton.setObjectName("pushButton")
         self.pushButton_2 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_2.setGeometry(QtCore.QRect(240, 150, 101, 21))
+        self.pushButton_2.setGeometry(QtCore.QRect(270, 190, 101, 21))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
         self.pushButton_2.setFont(font)
         self.pushButton_2.setObjectName("pushButton_2")
         self.pushButton_3 = QtWidgets.QPushButton(self.centralwidget)
-        self.pushButton_3.setGeometry(QtCore.QRect(240, 190, 101, 21))
+        self.pushButton_3.setGeometry(QtCore.QRect(270, 240, 101, 21))
         font = QtGui.QFont()
         font.setBold(True)
         font.setWeight(75)
