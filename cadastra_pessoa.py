@@ -1,4 +1,6 @@
-class Pessoa: 
+
+# cadastra cliente
+class Pessoa:
 	
 	__slots__ = ['_nome', '_cpf'] 
 	
@@ -14,7 +16,6 @@ class Pessoa:
 	@property
 	def cpf(self):
 		return self._cpf
-	
 	
 
 class Funcionario(Pessoa):
@@ -35,7 +36,7 @@ class Funcionario(Pessoa):
 		self._salario = salario
 	
 
-
+# cadastra cliente
 class Cadastra_pessoa(object):
 
 	__slots__ = ['_lista_pessoas']
@@ -63,3 +64,9 @@ class Cadastra_pessoa(object):
 				return pessoa
 
 		return None
+
+class Cadastra_funcionario(Cadastra_pessoa):
+
+	def __init__(self):
+		super().__init__()
+
