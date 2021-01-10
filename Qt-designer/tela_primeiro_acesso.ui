@@ -123,7 +123,7 @@
    <widget class="QLineEdit" name="lineEdit">
     <property name="geometry">
      <rect>
-      <x>152</x>
+      <x>150</x>
       <y>140</y>
       <width>351</width>
       <height>21</height>

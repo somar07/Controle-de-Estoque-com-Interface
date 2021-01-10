@@ -1,10 +1,12 @@
 class Produto:
+
+	__slots__ = ['_codigo', '_nome', '_valor', '_quantidade']
 	
-	def __init__(self):
-		self._codigo = 0
-		self._nome = None
-		self._valor = 0
-		self._quantidade = 0
+	def __init__(self, codigo, nome, valor, quantidade):
+		self._codigo = codigo
+		self._nome = nome
+		self._valor = valor
+		self._quantidade = quantidade
 
 
 	@property
@@ -54,35 +56,7 @@ class Cadastra_produto(object):
 	
 
 	def cadastra(self, produto):
-		existe = self.busca(produto.cpf)
-		if(existe == None):
-			self._lista_produtos.append(produto)
-			return True
-		
-		else:
-			return False
-
-	def busca(self, codigo):
-		for produto in self._lista_produtos:
-			if(produto.codigo == codigo):
-				return produto
-
-		return None
-
-class Cadastra_produto(object):
-
-	__slots__ = ['_lista_produtos']
-
-	def __init__(self):
-		self._lista_produtos = []
-
-	@property
-	def lista_produtos(self):
-		return self._lista_produtos
-	
-
-	def cadastra(self, produto):
-		existe = self.busca(produto.cpf)
+		existe = self.busca(produto.codigo)
 		if(existe == None):
 			self._lista_produtos.append(produto)
 			return True
