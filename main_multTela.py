@@ -3,7 +3,6 @@ import sys
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox
 
-from cadastra_pessoa import *
 from tela_cadastro_cliente import Tela_cadastro_cliente
 from tela_cadastro_funcionario import Tela_cadastro_funcionario
 from tela_cadastro_produto import Tela_cadastro_produto
@@ -15,7 +14,11 @@ from tela_tipo_cadastro import Tela_tipo_cadastro
 from tela_listagens import Tela_listagens
 from tela_tipo_exclusao import Tela_tipo_exclusao
 from tela_listDados import Tela_listDados
+from tela_vendas import Tela_vendas
+
 from produtos import *
+from cadastra_pessoa import *
+from vendas import *
 
 class Ui_main(QtWidgets.QWidget):
 	def setupUi(self, Main):
@@ -36,6 +39,7 @@ class Ui_main(QtWidgets.QWidget):
 		self.stack9 = QtWidgets.QMainWindow()
 		self.stack10 = QtWidgets.QMainWindow()
 		self.stack11 = QtWidgets.QMainWindow()
+		self.stack12 = QtWidgets.QMainWindow()
 
 		self.primeiro_acesso = Tela_primeiro_acesso()
 		self.primeiro_acesso.setupUi(self.stack0)
@@ -73,6 +77,9 @@ class Ui_main(QtWidgets.QWidget):
 		self.tela_login_cli = Tela_login_cli()
 		self.tela_login_cli.setupUi(self.stack11)
 
+		self.tela_vendas = Tela_vendas()
+		self.tela_vendas.setupUi(self.stack12)
+
 		self.QtStack.addWidget(self.stack0)#tela primeiro acesso
 		self.QtStack.addWidget(self.stack1)#tela inicial
 		self.QtStack.addWidget(self.stack2)#tela de login
@@ -85,6 +92,7 @@ class Ui_main(QtWidgets.QWidget):
 		self.QtStack.addWidget(self.stack9)#tela para cadastro de clientes
 		self.QtStack.addWidget(self.stack10)#tela para listar dados
 		self.QtStack.addWidget(self.stack11)#tela login cliente
+		self.QtStack.addWidget(self.stack12)#tela de vendas
 
 class Main(QMainWindow, Ui_main):
 	def __init__(self, parent=None):
@@ -100,6 +108,9 @@ class Main(QMainWindow, Ui_main):
 		# cadastro de produto
 		self.cadastra_produto = Cadastra_produto()
 
+		# Realiza vendas 
+		self.vendas = Vendas(self.cadastra_produto.lista_produtos)
+
 		#Interação tela primeiro acesso
 		self.primeiro_acesso.pushButton.clicked.connect(self.primeiro_cadastro)
 		self.primeiro_acesso.pushButton_2.clicked.connect(QtCore.QCoreApplication.instance().quit)
@@ -114,7 +125,7 @@ class Main(QMainWindow, Ui_main):
 		self.tela_login.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(1))
 
 		#Interação tela login cliete
-		self.tela_login_cli.pushButton_2.clicked.connect(self.btnLoginCli)
+		self.tela_login_cli.pushButton.clicked.connect(self.btnLoginCli)
 		self.tela_login_cli.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(1))
 		
 		#Interação tela de opções para o Funcionario
@@ -152,6 +163,9 @@ class Main(QMainWindow, Ui_main):
 
 		# Interação listar dados
 		self.tela_listDados.pushButton.clicked.connect(self.clear_area)
+
+		# Interação tela de vendas
+		self.tela_vendas.pushButton.clicked.connect(self.btnAddProd)
 
 
 	def primeiro_cadastro(self):
@@ -191,7 +205,11 @@ class Main(QMainWindow, Ui_main):
 	def abrirLoginCli(self):
 
 		if(self.cadastra_cliente.lista_pessoas != []):
-			self.QtStack.setCurrentIndex(11)
+
+			if(self.cadastra_produto.lista_produtos != []):
+				self.QtStack.setCurrentIndex(11)
+			else:
+				QMessageBox.information(None, 'Login', 'Não existem produtos cadastrados')
 			
 		else:
 			QMessageBox.information(None, 'Login', 'Não existem clientes cadastrados')
@@ -199,15 +217,19 @@ class Main(QMainWindow, Ui_main):
 
 	def btnLoginCli(self):
 
-		self.QtStack.setCurrentIndex(11)
-
 		cpf = self.tela_login_cli.lineEdit.text()
 
 		if(not(cpf == '')):
 			exite = self.cadastra_cliente.busca(cpf)
 
 			if(exite != None):
-				pass
+				self.QtStack.setCurrentIndex(12)
+				
+				for qtd, prod in  enumerate(self.cadastra_produto.lista_produtos):
+					info = "Produto: {}\nCódigo: {}\nNome: {}\nValor: {}\nQuantidade: {}\n" \
+					.format(qtd+1, prod.codigo, prod.nome, prod.valor, prod.quantidade)
+					self.tela_vendas.listWidget.addItem(info)
+
 			else:
 				QMessageBox.information(None, 'Login', 'Cpf não encotrado')
 				self.tela_login.lineEdit.setText('')
@@ -258,7 +280,8 @@ class Main(QMainWindow, Ui_main):
 		quantidade = self.tela_cadastro_produto.lineEdit_4.text()
 
 		if(not(codigo == '' or nome == '' or valor == '' or quantidade == '')):
-			produto = Produto(codigo, nome, valor, quantidade)
+			qtd = int(quantidade)
+			produto = Produto(codigo, nome, valor, qtd)
 			
 			if(self.cadastra_produto.cadastra(produto)):
 				QMessageBox.information(None, 'Cadastro', 'Produto cadastrado com sucesso!')
@@ -296,7 +319,7 @@ class Main(QMainWindow, Ui_main):
 			self.QtStack.setCurrentIndex(10)
 
 			for qtd, prod in  enumerate(self.cadastra_produto.lista_produtos):
-				info = "Produto: {}\nCódigo:\nNome: {}\nValor:\nQuantidade: {}\n" \
+				info = "Produto: {}\nCódigo: {}\nNome: {}\nValor: {}\nQuantidade: {}\n" \
 				.format(qtd+1, prod.codigo, prod.nome, prod.valor, prod.quantidade)
 				self.tela_listDados.listWidget.addItem(info)
 
@@ -306,8 +329,33 @@ class Main(QMainWindow, Ui_main):
 	def clear_area(self):
 		self.tela_listDados.listWidget.clear()
 		self.QtStack.setCurrentIndex(6)
+	
+	# Vendas 
+	def btnAddProd(self):
+		codigo = self.tela_vendas.lineEdit.text()
+		quantidade = self.tela_vendas.lineEdit_2.text()
 
-		
+
+		if(codigo != '' or quantidade != ''):
+			produto = self.cadastra_produto.busca(codigo)
+
+			if(produto != None):
+				qtd = int(quantidade)
+
+				if(self.vendas.add_produto(produto, qtd)):
+					self.tela_vendas.listWidget_2.clear()
+					for qtd, prod in  enumerate(self.vendas.lista_vendas):
+						info = "Produto: {}\nCódigo: {}\nNome: {}\nValor: {}\nQuantidade: {}\n" \
+						.format(qtd+1, prod.codigo, prod.nome, prod.valor, prod.quantidade)
+						self.tela_vendas.listWidget_2.addItem(info)
+				else:
+					QMessageBox.information(None, 'Vendas', 'Quantidade invalida')
+
+			else:
+				QMessageBox.information(None, 'Vendas', 'Produto não existe')
+
+		else:
+			QMessageBox.information(None, 'Vendas', 'Preencha todos os Dados')
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

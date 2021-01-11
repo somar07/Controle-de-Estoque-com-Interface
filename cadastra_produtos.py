@@ -39,7 +39,6 @@ class Produto:
 
 
 
-
 class Cadastra_produto(object):
 
 	__slots__ = ['_lista_produtos']
