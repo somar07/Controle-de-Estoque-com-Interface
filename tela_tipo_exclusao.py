@@ -46,13 +46,3 @@ class Tela_tipo_exclusao(object):
         self.label.setText(_translate("MainWindow", "O que deseja excluir?"))
         self.pushButton_2.setText(_translate("MainWindow", "Cliente"))
         self.pushButton_4.setText(_translate("MainWindow", "Voltar"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Tela_tipo_exclusao()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

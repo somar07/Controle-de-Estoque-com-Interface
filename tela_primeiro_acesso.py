@@ -76,13 +76,3 @@ class Tela_primeiro_acesso(object):
         self.label_2.setText(_translate("MainWindow", "Insira os dados do funcionário:"))
         self.label_5.setText(_translate("MainWindow", "Salário"))
         self.pushButton_2.setText(_translate("MainWindow", "Sair"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Tela_primeiro_acesso()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

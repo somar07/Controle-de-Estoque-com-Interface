@@ -45,13 +45,3 @@ class Tela_listagens(object):
         self.pushButton.setText(_translate("MainWindow", "Funcionários"))
         self.pushButton_4.setText(_translate("MainWindow", "Voltar"))
         self.pushButton_2.setText(_translate("MainWindow", "Clientes"))
-
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Tela_listagens()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

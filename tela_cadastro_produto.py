@@ -84,12 +84,3 @@ class Tela_cadastro_produto(object):
         self.pushButton.setText(_translate("MainWindow", "Cadastrar"))
         self.pushButton_2.setText(_translate("MainWindow", "Voltar"))
 
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Tela_cadastro_produto()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

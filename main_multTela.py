@@ -9,7 +9,7 @@ from tela_cadastro_funcionario import Tela_cadastro_funcionario
 from tela_cadastro_produto import Tela_cadastro_produto
 from tela_inicial import Tela_inicial
 from tela_primeiro_acesso import Tela_primeiro_acesso
-from tela_login_funcionario import Tela_login_func
+from tela_login import Tela_login, Tela_login_cli
 from tela_op_funcionario import Tela_op_funcionario
 from tela_tipo_cadastro import Tela_tipo_cadastro
 from tela_listagens import Tela_listagens
@@ -35,6 +35,7 @@ class Ui_main(QtWidgets.QWidget):
 		self.stack8 = QtWidgets.QMainWindow()
 		self.stack9 = QtWidgets.QMainWindow()
 		self.stack10 = QtWidgets.QMainWindow()
+		self.stack11 = QtWidgets.QMainWindow()
 
 		self.primeiro_acesso = Tela_primeiro_acesso()
 		self.primeiro_acesso.setupUi(self.stack0)
@@ -42,8 +43,8 @@ class Ui_main(QtWidgets.QWidget):
 		self.tela_inicial = Tela_inicial()
 		self.tela_inicial.setupUi(self.stack1)
 
-		self.tela_login_func = Tela_login_func()
-		self.tela_login_func.setupUi(self.stack2)
+		self.tela_login = Tela_login()
+		self.tela_login.setupUi(self.stack2)
 
 		self.tela_op_funcionario = Tela_op_funcionario()
 		self.tela_op_funcionario.setupUi(self.stack3)
@@ -69,6 +70,9 @@ class Ui_main(QtWidgets.QWidget):
 		self.tela_listDados = Tela_listDados()
 		self.tela_listDados.setupUi(self.stack10)
 
+		self.tela_login_cli = Tela_login_cli()
+		self.tela_login_cli.setupUi(self.stack11)
+
 		self.QtStack.addWidget(self.stack0)#tela primeiro acesso
 		self.QtStack.addWidget(self.stack1)#tela inicial
 		self.QtStack.addWidget(self.stack2)#tela de login
@@ -80,7 +84,7 @@ class Ui_main(QtWidgets.QWidget):
 		self.QtStack.addWidget(self.stack8)#tela para cadastro de clientes
 		self.QtStack.addWidget(self.stack9)#tela para cadastro de clientes
 		self.QtStack.addWidget(self.stack10)#tela para listar dados
-
+		self.QtStack.addWidget(self.stack11)#tela login cliente
 
 class Main(QMainWindow, Ui_main):
 	def __init__(self, parent=None):
@@ -102,11 +106,16 @@ class Main(QMainWindow, Ui_main):
 		
 		# Interação tela inicial
 		self.tela_inicial.pushButton.clicked.connect(lambda: self.QtStack.setCurrentIndex(2))
+		self.tela_inicial.pushButton_2.clicked.connect(self.abrirLoginCli)
 		self.tela_inicial.pushButton_3.clicked.connect(QtCore.QCoreApplication.instance().quit)
 
 		#Interação tela login funcionario
-		self.tela_login_func.pushButton.clicked.connect(self.btnLoginFunc)
-		self.tela_login_func.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(1))
+		self.tela_login.pushButton.clicked.connect(self.btnLoginFunc)
+		self.tela_login.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(1))
+
+		#Interação tela login cliete
+		self.tela_login_cli.pushButton_2.clicked.connect(self.btnLoginCli)
+		self.tela_login_cli.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(1))
 		
 		#Interação tela de opções para o Funcionario
 		self.tela_op_funcionario.pushButton.clicked.connect(lambda: self.QtStack.setCurrentIndex(4))#tipos de cadastro
@@ -163,7 +172,7 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 
 	def btnLoginFunc(self):
-		cpf = self.tela_login_func.lineEdit.text()
+		cpf = self.tela_login.lineEdit.text()
 
 		if(not(cpf == '')):
 			exite = self.cadastra_funcionario.busca(cpf)
@@ -171,15 +180,41 @@ class Main(QMainWindow, Ui_main):
 			# tela funcionario
 			if(exite != None):
 				self.QtStack.setCurrentIndex(3)
-				self.tela_login_func.lineEdit.setText('')
+				self.tela_login.lineEdit.setText('')
 			else:
 				QMessageBox.information(None, 'Login', 'Cpf não encotrado')
-				self.tela_login_func.lineEdit.setText('')
+				self.tela_login.lineEdit.setText('')
 
 		else:
 			QMessageBox.information(None, 'Login', 'Informe seu cpf')
-			self.tela_login_func.lineEdit.setText('')
+	
+	def abrirLoginCli(self):
 
+		if(self.cadastra_cliente.lista_pessoas != []):
+			self.QtStack.setCurrentIndex(11)
+			
+		else:
+			QMessageBox.information(None, 'Login', 'Não existem clientes cadastrados')
+		
+
+	def btnLoginCli(self):
+
+		self.QtStack.setCurrentIndex(11)
+
+		cpf = self.tela_login_cli.lineEdit.text()
+
+		if(not(cpf == '')):
+			exite = self.cadastra_cliente.busca(cpf)
+
+			if(exite != None):
+				pass
+			else:
+				QMessageBox.information(None, 'Login', 'Cpf não encotrado')
+				self.tela_login.lineEdit.setText('')
+
+		else:
+			QMessageBox.information(None, 'Login', 'Informe seu cpf')
+	
 
 	def btnCadastra_func(self):
 		nome = self.tela_cadastro_funcionario.lineEdit.text()
@@ -254,7 +289,6 @@ class Main(QMainWindow, Ui_main):
 
 		else:
 			QMessageBox.information(None, 'Listar', 'Não existem clientes cadastrados')
-			self.QtStack.setCurrentIndex(6)
 
 	def btnListProd(self):
 
@@ -268,7 +302,6 @@ class Main(QMainWindow, Ui_main):
 
 		else:
 			QMessageBox.information(None, 'Listar', 'Não existem produtos cadastrados')
-			self.QtStack.setCurrentIndex(6)
 	
 	def clear_area(self):
 		self.tela_listDados.listWidget.clear()

@@ -47,12 +47,3 @@ class Tela_op_funcionario(object):
         self.pushButton_3.setText(_translate("MainWindow", "Listar"))
         self.pushButton_4.setText(_translate("MainWindow", "Voltar"))
 
-
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Tela_op_funcionario()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())

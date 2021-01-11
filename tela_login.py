@@ -1,14 +1,14 @@
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 
-class Tela_login_func(object):
+class Tela_login(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(640, 480)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.label = QtWidgets.QLabel(self.centralwidget)
-        self.label.setGeometry(QtCore.QRect(250, 60, 111, 21))
+        self.label.setGeometry(QtCore.QRect(330, 60, 111, 21))
         font = QtGui.QFont()
         font.setFamily("Roboto")
         font.setPointSize(16)
@@ -37,17 +37,12 @@ class Tela_login_func(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "Controle de Estoque"))
-        self.label.setText(_translate("MainWindow", "Funcionário"))
+        self.label.setText(_translate("MainWindow", "Login"))
         self.label_2.setText(_translate("MainWindow", "CPF"))
         self.pushButton.setText(_translate("MainWindow", "Entrar"))
         self.pushButton_2.setText(_translate("MainWindow", "Voltar"))
 
 
-if __name__ == "__main__":
-    import sys
-    app = QtWidgets.QApplication(sys.argv)
-    MainWindow = QtWidgets.QMainWindow()
-    ui = Ui_MainWindow()
-    ui.setupUi(MainWindow)
-    MainWindow.show()
-    sys.exit(app.exec_())
+class Tela_login_cli(Tela_login):
+    def __init__(self):
+        super().__init__()
