@@ -11,7 +11,6 @@ class Produto:
 	def codigo(self):
 		return self._codigo
 
-
 	@property
 	def nome(self):
 		return self._nome
@@ -54,7 +53,7 @@ class Cadastra_produto(object):
 	
 
 	def cadastra(self, produto):
-		existe = self.busca(produto.cpf)
+		existe = self.busca(produto.codigo)
 		if(existe == None):
 			self._lista_produtos.append(produto)
 			return True
