@@ -16,7 +16,7 @@ from tela_tipo_exclusao import Tela_tipo_exclusao
 from tela_listDados import Tela_listDados
 from tela_vendas import Tela_vendas
 
-from produtos import *
+from cadastra_produtos import *
 from cadastra_pessoa import *
 from vendas import *
 
@@ -108,8 +108,6 @@ class Main(QMainWindow, Ui_main):
 		# cadastro de produto
 		self.cadastra_produto = Cadastra_produto()
 
-		# Realiza vendas 
-		self.vendas = Vendas(self.cadastra_produto.lista_produtos)
 
 		#Interação tela primeiro acesso
 		self.primeiro_acesso.pushButton.clicked.connect(self.primeiro_cadastro)
@@ -208,6 +206,8 @@ class Main(QMainWindow, Ui_main):
 
 			if(self.cadastra_produto.lista_produtos != []):
 				self.QtStack.setCurrentIndex(11)
+				# Realiza vendas 
+				self.vendas = Vendas(self.cadastra_produto.lista_produtos)
 			else:
 				QMessageBox.information(None, 'Login', 'Não existem produtos cadastrados')
 			
@@ -281,7 +281,8 @@ class Main(QMainWindow, Ui_main):
 
 		if(not(codigo == '' or nome == '' or valor == '' or quantidade == '')):
 			qtd = int(quantidade)
-			produto = Produto(codigo, nome, valor, qtd)
+			val = float(valor)
+			produto = Produto(codigo, nome, val, qtd)
 			
 			if(self.cadastra_produto.cadastra(produto)):
 				QMessageBox.information(None, 'Cadastro', 'Produto cadastrado com sucesso!')
@@ -344,10 +345,17 @@ class Main(QMainWindow, Ui_main):
 
 				if(self.vendas.add_produto(produto, qtd)):
 					self.tela_vendas.listWidget_2.clear()
-					for qtd, prod in  enumerate(self.vendas.lista_vendas):
+					info = "Total da Compra: {}".format(self.vendas.total)
+					self.tela_vendas.listWidget_2.addItem(info)
+					
+					self.tela_vendas.listWidget.clear()
+					for qtd, prod in  enumerate(self.cadastra_produto.lista_produtos):
 						info = "Produto: {}\nCódigo: {}\nNome: {}\nValor: {}\nQuantidade: {}\n" \
 						.format(qtd+1, prod.codigo, prod.nome, prod.valor, prod.quantidade)
-						self.tela_vendas.listWidget_2.addItem(info)
+						self.tela_vendas.listWidget.addItem(info)
+
+					
+					
 				else:
 					QMessageBox.information(None, 'Vendas', 'Quantidade invalida')
 

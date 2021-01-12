@@ -1,15 +1,18 @@
 class Produto:
+
+	__slots__ = ['_codigo', '_nome', '_valor', '_quantidade']
 	
-	def __init__(self):
-		self._codigo = 0
-		self._nome = None
-		self._valor = 0
-		self._quantidade = 0
+	def __init__(self, codigo, nome, valor, quantidade):
+		self._codigo = codigo
+		self._nome = nome
+		self._valor = valor
+		self._quantidade = quantidade
 
 
 	@property
 	def codigo(self):
 		return self._codigo
+
 
 	@property
 	def nome(self):
@@ -36,6 +39,7 @@ class Produto:
 	@quantidade.setter
 	def quantidade(self, quantidade):
 		self._quantidade = quantidade
+
 
 
 
