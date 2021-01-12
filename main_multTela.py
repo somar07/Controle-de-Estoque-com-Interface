@@ -14,7 +14,7 @@ from tela_tipo_cadastro import Tela_tipo_cadastro
 from tela_listagens import Tela_listagens
 from tela_tipo_exclusao import Tela_tipo_exclusao
 from tela_listDados import Tela_listDados
-from tela_vendas import Tela_vendas
+from tela_vendas import Tela_vendas, Tela_validar
 
 from cadastra_produtos import *
 from cadastra_pessoa import *
@@ -40,6 +40,7 @@ class Ui_main(QtWidgets.QWidget):
 		self.stack10 = QtWidgets.QMainWindow()
 		self.stack11 = QtWidgets.QMainWindow()
 		self.stack12 = QtWidgets.QMainWindow()
+		self.stack13 = QtWidgets.QMainWindow()
 
 		self.primeiro_acesso = Tela_primeiro_acesso()
 		self.primeiro_acesso.setupUi(self.stack0)
@@ -80,6 +81,9 @@ class Ui_main(QtWidgets.QWidget):
 		self.tela_vendas = Tela_vendas()
 		self.tela_vendas.setupUi(self.stack12)
 
+		self.tela_validar = Tela_validar()
+		self.tela_validar.setupUi(self.stack13)
+
 		self.QtStack.addWidget(self.stack0)#tela primeiro acesso
 		self.QtStack.addWidget(self.stack1)#tela inicial
 		self.QtStack.addWidget(self.stack2)#tela de login
@@ -93,6 +97,9 @@ class Ui_main(QtWidgets.QWidget):
 		self.QtStack.addWidget(self.stack10)#tela para listar dados
 		self.QtStack.addWidget(self.stack11)#tela login cliente
 		self.QtStack.addWidget(self.stack12)#tela de vendas
+		self.QtStack.addWidget(self.stack13)#tela de validar
+
+		
 
 class Main(QMainWindow, Ui_main):
 	def __init__(self, parent=None):
@@ -164,6 +171,15 @@ class Main(QMainWindow, Ui_main):
 
 		# Interação tela de vendas
 		self.tela_vendas.pushButton.clicked.connect(self.btnAddProd)
+		self.tela_vendas.pushButton_3.clicked.connect(self.btnFinalizar_comp)
+
+		# Interação tela validar vendar
+		self.tela_validar.pushButton.clicked.connect(self.valida_compra)
+		self.tela_validar.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(13))
+
+
+		
+
 
 
 	def primeiro_cadastro(self):
@@ -340,21 +356,34 @@ class Main(QMainWindow, Ui_main):
 		if(codigo != '' or quantidade != ''):
 			produto = self.cadastra_produto.busca(codigo)
 
-			if(produto != None):
+			if(produto != None and produto.quantidade > 0):
 				qtd = int(quantidade)
 
 				if(self.vendas.add_produto(produto, qtd)):
 					self.tela_vendas.listWidget_2.clear()
-					info = "Total da Compra: {}".format(self.vendas.total)
-					self.tela_vendas.listWidget_2.addItem(info)
-					
-					self.tela_vendas.listWidget.clear()
-					for qtd, prod in  enumerate(self.cadastra_produto.lista_produtos):
+
+					self.tela_vendas.lineEdit_3.setText('')
+					self.tela_vendas.lineEdit_3.setText(str(self.vendas.total))
+				
+					self.tela_vendas.listWidget_2.clear()
+					for qtd, prod in  enumerate(self.vendas.lista_compras):
 						info = "Produto: {}\nCódigo: {}\nNome: {}\nValor: {}\nQuantidade: {}\n" \
 						.format(qtd+1, prod.codigo, prod.nome, prod.valor, prod.quantidade)
-						self.tela_vendas.listWidget.addItem(info)
+						self.tela_vendas.listWidget_2.addItem(info)
 
 					
+					self.tela_vendas.listWidget.clear()
+					zerado = True
+					for qtd, prod in  enumerate(self.cadastra_produto.lista_produtos):
+						if(prod.quantidade > 0):
+							info = "Produto: {}\nCódigo: {}\nNome: {}\nValor: {}\nQuantidade: {}\n" \
+							.format(qtd+1, prod.codigo, prod.nome, prod.valor, prod.quantidade)
+							self.tela_vendas.listWidget.addItem(info)
+							zerado = False
+						
+					if(zerado):
+						QMessageBox.information(None, 'Vendas', 'Estoque zerado')
+
 					
 				else:
 					QMessageBox.information(None, 'Vendas', 'Quantidade invalida')
@@ -364,6 +393,38 @@ class Main(QMainWindow, Ui_main):
 
 		else:
 			QMessageBox.information(None, 'Vendas', 'Preencha todos os Dados')
+		
+		self.tela_vendas.lineEdit.setText('')
+		self.tela_vendas.lineEdit_2.setText('')
+
+	def btnFinalizar_comp(self):
+
+		if(self.vendas.lista_compras != []):
+			self.QtStack.setCurrentIndex(13)
+		else:
+			QMessageBox.information(None, 'Vendas', 'Adicione algum produto no carrilho')
+
+	def valida_compra(self):
+
+		cpf = self.tela_validar.lineEdit.text()
+
+		if(cpf != ''):
+			existe = self.cadastra_funcionario.busca(cpf)
+
+			if(existe != None):
+				QMessageBox.information(None, 'Vendas', 'Compra comcluida')
+				self.tela_validar.lineEdit.setText('')
+				self.cadastra_produto.rm_prod_zerado()
+				self.QtStack.setCurrentIndex(1)
+			
+			else:
+				QMessageBox.information(None, 'Vendas', 'Funcionario não encontrado')
+				cpf = self.tela_validar.lineEdit.setText('')
+
+		else:
+			QMessageBox.information(None, 'Vendas', 'Preencha todos os Dados')
+
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

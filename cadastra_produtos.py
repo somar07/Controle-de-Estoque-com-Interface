@@ -70,3 +70,9 @@ class Cadastra_produto(object):
 				return produto
 
 		return None
+
+	#  remove produtos que esteja com a quantidade zerada
+	def rm_prod_zerado(self):
+		for produto in self._lista_produtos:
+			if(produto.quantidade == 0):
+				self._lista_produtos.remove(produto)
