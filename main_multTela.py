@@ -412,7 +412,7 @@ class Main(QMainWindow, Ui_main):
 			existe = self.cadastra_funcionario.busca(cpf)
 
 			if(existe != None):
-				QMessageBox.information(None, 'Vendas', 'Compra comcluida')
+				QMessageBox.information(None, 'Vendas', 'Compra concluida')
 				self.tela_validar.lineEdit.setText('')
 				self.cadastra_produto.rm_prod_zerado()
 				self.QtStack.setCurrentIndex(1)
