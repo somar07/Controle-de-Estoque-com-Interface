@@ -14,7 +14,8 @@ from tela_tipo_cadastro import Tela_tipo_cadastro
 from tela_listagens import Tela_listagens
 from tela_tipo_exclusao import Tela_tipo_exclusao
 from tela_listDados import Tela_listDados
-from tela_vendas import Tela_vendas, Tela_validar
+from tela_vendas import Tela_vendas
+from tela_validar import Tela_validar
 
 from cadastra_produtos import *
 from cadastra_pessoa import *
@@ -116,6 +117,7 @@ class Main(QMainWindow, Ui_main):
 		self.cadastra_produto = Cadastra_produto()
 
 
+
 		#Interação tela primeiro acesso
 		self.primeiro_acesso.pushButton.clicked.connect(self.primeiro_cadastro)
 		self.primeiro_acesso.pushButton_2.clicked.connect(QtCore.QCoreApplication.instance().quit)
@@ -171,14 +173,12 @@ class Main(QMainWindow, Ui_main):
 
 		# Interação tela de vendas
 		self.tela_vendas.pushButton.clicked.connect(self.btnAddProd)
+		self.tela_vendas.pushButton_2.clicked.connect(self.btnRemoverProd)
 		self.tela_vendas.pushButton_3.clicked.connect(self.btnFinalizar_comp)
-
+		self.tela_vendas.pushButton_4.clicked.connect(lambda: self.QtStack.setCurrentIndex(1))
 		# Interação tela validar vendar
 		self.tela_validar.pushButton.clicked.connect(self.valida_compra)
 		self.tela_validar.pushButton_2.clicked.connect(lambda: self.QtStack.setCurrentIndex(13))
-
-
-		
 
 
 
@@ -230,7 +230,6 @@ class Main(QMainWindow, Ui_main):
 		else:
 			QMessageBox.information(None, 'Login', 'Não existem clientes cadastrados')
 		
-
 	def btnLoginCli(self):
 
 		cpf = self.tela_login_cli.lineEdit.text()
@@ -253,7 +252,6 @@ class Main(QMainWindow, Ui_main):
 		else:
 			QMessageBox.information(None, 'Login', 'Informe seu cpf')
 	
-
 	def btnCadastra_func(self):
 		nome = self.tela_cadastro_funcionario.lineEdit.text()
 		cpf = self.tela_cadastro_funcionario.lineEdit_2.text()
@@ -347,18 +345,20 @@ class Main(QMainWindow, Ui_main):
 		self.tela_listDados.listWidget.clear()
 		self.QtStack.setCurrentIndex(6)
 	
-	# Vendas 
+	# Vendas
+	
 	def btnAddProd(self):
 		codigo = self.tela_vendas.lineEdit.text()
 		quantidade = self.tela_vendas.lineEdit_2.text()
-
+		
 
 		if(codigo != '' or quantidade != ''):
 			produto = self.cadastra_produto.busca(codigo)
-
+			
 			if(produto != None and produto.quantidade > 0):
 				qtd = int(quantidade)
-
+				
+				self.qtdAux = qtd
 				if(self.vendas.add_produto(produto, qtd)):
 					self.tela_vendas.listWidget_2.clear()
 
@@ -370,6 +370,7 @@ class Main(QMainWindow, Ui_main):
 						info = "Produto: {}\nCódigo: {}\nNome: {}\nValor: {}\nQuantidade: {}\n" \
 						.format(qtd+1, prod.codigo, prod.nome, prod.valor, prod.quantidade)
 						self.tela_vendas.listWidget_2.addItem(info)
+						self.prodAux = prod
 
 					
 					self.tela_vendas.listWidget.clear()
@@ -397,6 +398,15 @@ class Main(QMainWindow, Ui_main):
 		self.tela_vendas.lineEdit.setText('')
 		self.tela_vendas.lineEdit_2.setText('')
 
+	def btnRemoverProd(self):
+		lista = self.tela_vendas.listWidget_2.selectedItems()
+		
+		self.tela_vendas.lineEdit_3.setText('')
+		if not lista:
+			return
+		for itm in lista:
+			self.tela_vendas.listWidget_2.takeItem(self.tela_vendas.listWidget_2.row(itm))
+		
 	def btnFinalizar_comp(self):
 
 		if(self.vendas.lista_compras != []):

@@ -1,4 +1,6 @@
 import copy
+from cadastra_produtos import Cadastra_produto
+
 
 class Vendas():
 
@@ -6,6 +8,7 @@ class Vendas():
         self._lista_produtos = lista_produtos
         self._lista_compras = []
         self._total = 0
+        self.add = Cadastra_produto()
       
 
     @property
@@ -22,7 +25,7 @@ class Vendas():
     
     @lista_compras.setter
     def lista_compras(self, _lista_compras):
-	    self._lista_compras = lista_compras
+	    self._lista_compras = _lista_compras
 
     @property
     def total(self):
@@ -56,7 +59,20 @@ class Vendas():
             return True
         
         else:
-            return False    
+            return False
+
+    def rem_produto(self,produto,qtd):
+        
+        existe = self.busca_compras(produto)
+        if(existe != None):
+            indice = self.lista_compras.index(existe)
+            self.total -= qtd * produto
+            produto.quantidade += qtd
+            del(self.lista_compras[indice])
+
+            return True
+        
+        return False
 
     def busca_compras(self, codigo):
 

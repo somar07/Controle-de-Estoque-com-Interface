@@ -74,7 +74,7 @@
     <rect>
      <x>10</x>
      <y>100</y>
-     <width>61</width>
+     <width>71</width>
      <height>16</height>
     </rect>
    </property>
@@ -145,13 +145,13 @@
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>310</y>
+     <y>320</y>
      <width>91</width>
-     <height>21</height>
+     <height>31</height>
     </rect>
    </property>
    <property name="text">
-    <string>Finalizar Compra</string>
+    <string>Comprar</string>
    </property>
   </widget>
   <widget class="QPushButton" name="pushButton_4">
