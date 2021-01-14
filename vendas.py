@@ -4,6 +4,28 @@ from cadastra_produtos import Cadastra_produto
 
 class Vendas():
 
+    '''
+    class Vendas(), realiza dos vendas de produtos
+
+    Parametros
+    ----------
+    lista_produtos -> Produto()
+
+    Atributos 
+    ---------
+    lista_produtos -> Produto()
+    lista_compras -> Produto()
+    total -> float
+
+
+    Funções
+    -------
+    add_produto
+    rem_produto -> ainda a ser finalizada 
+    busca_compras
+
+    '''
+
     def __init__(self, lista_produtos ):
         self._lista_produtos = lista_produtos
         self._lista_compras = []
@@ -37,6 +59,17 @@ class Vendas():
     
     def add_produto(self, produto, qtd):
 
+        '''
+        Função add_produto
+        ------------------ 
+        adiciona um produto na lista de compra de acordo com quantidade informada
+
+        Parametros
+        ----------
+        produto -> Produto
+        qtd -> int
+        '''
+
         if(produto.quantidade >= qtd):
 
             prod_aux = copy.deepcopy(produto)
@@ -62,6 +95,18 @@ class Vendas():
             return False
 
     def rem_produto(self,produto,qtd):
+
+        '''
+        Função rem_produt
+        ainda a ser finalizada
+        -----------------------
+        adiciona um remove na lista de compra de acordo com quantidade informada
+
+        Parametros
+        ----------
+        produto -> Produto
+        qtd -> int
+        '''
         
         existe = self.busca_compras(produto)
         if(existe != None):
@@ -76,9 +121,23 @@ class Vendas():
 
     def busca_compras(self, codigo):
 
+        '''
+        Função  busca_compras
+        ----------------------
+        Buca por um produto na lista_compras,
+
+        Parametros
+        ----------
+        codigo -> str
+
+        return
+        None 
+        produto()
+       
+        '''
+
         for prod in self.lista_compras:
             if(prod.codigo == codigo):
                 return prod
         else:
             return None
-
