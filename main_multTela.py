@@ -25,7 +25,41 @@ from cadastra_pessoa import *
 from vendas import *
 
 class Ui_main(QtWidgets.QWidget):
+
+	'''
+	class Ui_main()
+	---------------
+	Responsavel por conter o layout de todas as telas, estancia
+
+	Funções
+	-------
+	setupUi()
+	'''
+
 	def setupUi(self, Main):
+
+		'''
+		Função setupUi
+		--------------
+		Monta a pilha de telas
+
+		Telas
+		-----
+		stack0 -> tela primeiro acesso
+		stack1 -> tela inicial
+		stack2 -> tela de login
+		stack3 -> tela de opções para o funcionario
+		stack4 -> tela para tipos de cadastro
+		stack5 -> tela para opções de exclusão
+		stack6 -> tela para opções de listagens
+		stack7 -> tela para cadastro de funcionários
+		stack8 -> tela para cadastro de clientes
+		stack9 -> tela para cadastro de clientes
+		stack10 -> tela para listar dados
+		stack11 -> tela login cliente
+		stack12 -> tela de vendas
+		stack13 -> tela de validar
+		'''
 		Main.setObjectName('Main')
 		Main.resize(640, 480)
 	
@@ -121,6 +155,21 @@ class Ui_main(QtWidgets.QWidget):
 		
 
 class Main(QMainWindow, Ui_main):
+	'''
+	class Main()
+	------------
+	Responsavel por realizar a interação das telas
+
+	Paramentros 
+	-----------
+	Ui_main -> Ui_main()
+
+	Funções
+	-------
+	primeiro_cadastro()
+
+	'''
+
 	def __init__(self, parent=None):
 		super(Main, self).__init__(parent)
 		self.setupUi(self)
@@ -215,9 +264,15 @@ class Main(QMainWindow, Ui_main):
 		self.tela_excluir_produto.pushButton_2.clicked.connect(self.btnExcProd)
 		self.tela_excluir_produto.pushButton.clicked.connect(lambda: self.QtStack.setCurrentIndex(5))
 
-
-
 	def primeiro_cadastro(self):
+		'''
+		primeiro_cadastro()
+		-------------------
+		Define o primero funcionario do sistema, reliza o primero cadastro
+		'''
+
+
+
 		nome = self.primeiro_acesso.lineEdit.text()
 		cpf = self.primeiro_acesso.lineEdit_2.text()
 		salario = self.primeiro_acesso.lineEdit_3.text()
@@ -235,8 +290,17 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 
 	def btnLoginFunc(self):
-		cpf = self.tela_login.lineEdit.text()
+		'''
+		btnLoginFunc()
+		--------------
+		Reliza a validação do funcionario
 
+		Funções
+		--------
+		cadastra_funcionario.busca() 
+		''''
+	
+		cpf = self.tela_login.lineEdit.text()
 
 
 		if(not(cpf == '')):
@@ -254,6 +318,12 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Login', 'Informe seu cpf')
 	
 	def abrirLoginCli(self):
+		
+		'''
+		abrirLoginCli()
+		---------------
+		Define qual ação o cliente poderá realizar
+		'''
 
 		if(self.cadastra_cliente.lista_pessoas != []):
 
@@ -278,6 +348,11 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Login', 'Não existem clientes cadastrados')
 		
 	def btnLoginCli(self):
+		'''
+		btnLoginCli()
+		-------------
+		Define se a tela de login séra aberta
+		''' 
 
 		cpf = self.tela_login_cli.lineEdit.text()
 		self.tela_vendas.lineEdit_3.setText('')
@@ -297,6 +372,7 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Login', 'Informe seu cpf')
 	
 	def btnCadastra_func(self):
+
 		nome = self.tela_cadastro_funcionario.lineEdit.text()
 		cpf = self.tela_cadastro_funcionario.lineEdit_2.text()
 		salario = self.tela_cadastro_funcionario.lineEdit_3.text()
@@ -394,7 +470,6 @@ class Main(QMainWindow, Ui_main):
 		codigo = self.tela_vendas.lineEdit.text()
 		quantidade = self.tela_vendas.lineEdit_2.text()
 
-		
 
 		if(codigo != '' or quantidade != ''):
 			produto = self.cadastra_produto.busca(codigo)
@@ -556,6 +631,7 @@ class Main(QMainWindow, Ui_main):
 		else:
 			QMessageBox.information(None, 'Excluir', 'Campo obrigatório!')
 
+print(Main.__doc__)
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     show_main = Main()
