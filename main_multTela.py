@@ -372,6 +372,12 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Login', 'Informe seu cpf')
 	
 	def btnCadastra_func(self):
+		'''
+		btnCadastra_func()
+		------------------
+		Cadastra funcionario criado um objeto do tipo Funcionario e
+		adiciona na lista de funcionario
+		''''
 
 		nome = self.tela_cadastro_funcionario.lineEdit.text()
 		cpf = self.tela_cadastro_funcionario.lineEdit_2.text()
@@ -392,6 +398,15 @@ class Main(QMainWindow, Ui_main):
 	
 
 	def btnCadastra_cliente(self):
+		'''
+		btnCadastra_cliente()
+		---------------------
+		Cadastra Pessoa criado um objeto do tipo Pessoa e
+		adiciona na lista de Pessoa
+		'''
+
+		Cadastra funcionario criado um objeto do tipo Funcionario e
+		adiciona na lista de funcionario
 		nome = self.tela_cadastro_cliente.lineEdit.text()
 		cpf = self.tela_cadastro_cliente.lineEdit_2.text()
 		
@@ -408,6 +423,13 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 	
 	def btnCadastra_produto(self):
+		'''
+		btnCadastra_cliente()
+		---------------------
+		Cadastra Produto criado um objeto do tipo Produto e
+		adiciona na lista de Produto
+		'''
+
 		codigo = self.tela_cadastro_produto.lineEdit.text()
 		nome = self.tela_cadastro_produto.lineEdit_2.text()
 		valor = self.tela_cadastro_produto.lineEdit_3.text()
@@ -467,6 +489,12 @@ class Main(QMainWindow, Ui_main):
 	
 	# Vendas
 	def btnAddProd(self):
+		'''
+		btnAddProd()
+		------------
+		Ações de vendas, trabalha com as funções da classe Venda
+
+		'''
 		codigo = self.tela_vendas.lineEdit.text()
 		quantidade = self.tela_vendas.lineEdit_2.text()
 
@@ -492,7 +520,6 @@ class Main(QMainWindow, Ui_main):
 						
 						self.tela_vendas.listWidget_2.addItem(info)
 						
-
 					
 					self.tela_vendas.listWidget.clear()
 					zerado = True
@@ -520,6 +547,7 @@ class Main(QMainWindow, Ui_main):
 		self.tela_vendas.lineEdit_2.setText('')
 
 	def btnRemoverProd(self):
+		
 		lista = self.tela_vendas.listWidget_2.selectedItems()
 
 		if(self.vendas.lista_compras != []):
@@ -631,7 +659,6 @@ class Main(QMainWindow, Ui_main):
 		else:
 			QMessageBox.information(None, 'Excluir', 'Campo obrigatório!')
 
-print(Main.__doc__)
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     show_main = Main()
