@@ -591,6 +591,12 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Vendas', 'Lista de compras vazia!')
 		
 	def btnFinalizar_comp(self):
+		'''
+		btnFinalizar_comp()
+		-------------------
+		Responsavel por redirecionar o usuario quando a compra for finalizada 
+
+		'''
 
 		if(self.vendas.lista_compras != []):
 			self.QtStack.setCurrentIndex(13)
@@ -598,6 +604,12 @@ class Main(QMainWindow, Ui_main):
 			QMessageBox.information(None, 'Vendas', 'Adicione algum produto no carrilho')
 
 	def valida_compra(self):
+
+		'''
+		valida_compra()
+		---------------
+		Buca por um funcionario, antes da compra ser finalida
+		'''
 
 		cpf = self.tela_validar.lineEdit.text()
 
