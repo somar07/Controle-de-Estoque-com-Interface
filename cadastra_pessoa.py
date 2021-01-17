@@ -5,7 +5,7 @@ class Pessoa:
 	'''
 	class Pessoa()
 	---------------
-	Responsavel por conter as informações das pessoas que
+	Responsavel por receber as informações das pessoas que
 	serão cadastradas no sistema como, funcionários e clientes.
 	
 	Paramentros
