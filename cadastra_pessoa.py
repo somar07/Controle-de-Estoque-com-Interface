@@ -7,6 +7,12 @@ class Pessoa:
 	---------------
 	Responsavel por conter as informações das pessoas que
 	serão cadastradas no sistema como, funcionários e clientes.
+	
+	Paramentros
+	-----------
+	nome -> string
+	cpf -> string
+	
 	'''
 	
 	__slots__ = ['_nome', '_cpf'] 
@@ -35,8 +41,14 @@ class Funcionario(Pessoa):
 
 	Paramentros
 	-----------
-	Pessoa -> Pessoa()	
+	Pessoa -> Pessoa()
+	nome -> Pessoa()
+	cpf -> Pessoa()
 
+	Atributos
+	----------
+	salario -> float
+	
 	'''
 
 	__slots__ = ['_nome', '_cpf', '_salario'] 
