@@ -70,6 +70,22 @@ class Funcionario(Pessoa):
 # cadastra cliente
 class Cadastra_pessoa(object):
 
+	'''
+	class Cadastra_pessoa()
+	-------------------------
+	Responsavel pelo cadastro de pessoas no sistema.
+
+	Atributos
+	----------
+	lista_pessoas -> list
+
+	funções
+	-------
+	cadastra
+	busca
+
+	'''
+
 	__slots__ = ['_lista_pessoas']
 
 	def __init__(self):
@@ -81,6 +97,18 @@ class Cadastra_pessoa(object):
 	
 
 	def cadastra(self, pessoa):
+		'''
+		Funcao cadastra
+		---------------
+		Adiciona pessoas cadastradas a uma lista, se a pessoa
+		já estiver na lista a função retorna false e o cadastro não é
+		realizado.
+
+		Paramentros
+		------------
+		pessoa -> Pessoa
+		
+		'''
 		existe = self.busca(pessoa.cpf)
 		if(existe == None):
 			self._lista_pessoas.append(pessoa)
@@ -97,6 +125,10 @@ class Cadastra_pessoa(object):
 		return None
 
 class Cadastra_funcionario(Cadastra_pessoa):
+	'''
+	class Cadastra_funcionario()
+	Realiza o cadastro dos funcionários em lista diferente das dos clientes.
+	'''
 
 	def __init__(self):
 		super().__init__()
