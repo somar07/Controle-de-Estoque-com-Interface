@@ -57,6 +57,23 @@ class Produto:
 
 class Cadastra_produto(object):
 
+	'''
+	class Cadastra_produto()
+	-------------------------
+	Responsavel por cadastrar os produtos no sistema.
+
+	Atributos
+	----------
+	lista_produtos -> list
+
+	funcoes
+	-------
+	cadastra
+	busca
+	rm_prod_zerado
+
+	'''
+
 	__slots__ = ['_lista_produtos']
 
 	def __init__(self):
@@ -68,6 +85,17 @@ class Cadastra_produto(object):
 	
 
 	def cadastra(self, produto):
+		'''
+		funcao cadastra
+		----------------
+		Adiona os produtos cadastrados na lista_produtos,
+		desde que nao tenha codigo repetido.
+
+		Paramentros
+		------------
+		produto -> Produto
+
+		'''
 		existe = self.busca(produto.codigo)
 		if(existe == None):
 			self._lista_produtos.append(produto)
@@ -77,14 +105,27 @@ class Cadastra_produto(object):
 			return False
 
 	def busca(self, codigo):
+		'''
+		Funcao busca
+		-------------
+		Responsavel por localizar um produto desejado, por meio do codigo.
+
+		Paramentros
+		-----------
+		codigo -> Produto
+		'''
 		for produto in self._lista_produtos:
 			if(produto.codigo == codigo):
 				return produto
 
 		return None
 
-	#  remove produtos que esteja com a quantidade zerada
 	def rm_prod_zerado(self):
+		'''
+		Funcao rm_prod_zerado
+		---------------------
+		Remove produtos que estejam com a quantidade zerada.
+		'''
 		for produto in self._lista_produtos:
 			if(produto.quantidade == 0):
 				self._lista_produtos.remove(produto)
