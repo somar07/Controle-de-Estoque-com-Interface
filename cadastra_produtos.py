@@ -1,5 +1,17 @@
 class Produto:
+	'''
+	class Produto()
+	---------------
+	Classe responsável por receber os dados dos produtos que serão cadastrados no sistema.
 
+	Atributos
+	----------
+	codigo -> string
+	nome -> string
+	valor -> float
+	quantidade -> int
+	
+	'''
 	__slots__ = ['_codigo', '_nome', '_valor', '_quantidade']
 	
 	def __init__(self, codigo, nome, valor, quantidade):
