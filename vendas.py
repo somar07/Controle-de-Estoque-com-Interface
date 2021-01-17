@@ -21,7 +21,6 @@ class Vendas():
     Funções
     -------
     add_produto
-    rem_produto -> ainda a ser finalizada 
     busca_compras
 
     '''
@@ -94,30 +93,6 @@ class Vendas():
         else:
             return False
 
-    def rem_produto(self,produto,qtd):
-
-        '''
-        Função rem_produt
-        ainda a ser finalizada
-        -----------------------
-        adiciona um remove na lista de compra de acordo com quantidade informada
-
-        Parametros
-        ----------
-        produto -> Produto
-        qtd -> int
-        '''
-        
-        existe = self.busca_compras(produto)
-        if(existe != None):
-            indice = self.lista_compras.index(existe)
-            self.total -= qtd * produto
-            produto.quantidade += qtd
-            del(self.lista_compras[indice])
-
-            return True
-        
-        return False
 
     def busca_compras(self, codigo):
 
