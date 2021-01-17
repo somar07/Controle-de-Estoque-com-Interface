@@ -298,7 +298,7 @@ class Main(QMainWindow, Ui_main):
 		Funções
 		--------
 		cadastra_funcionario.busca() 
-		''''
+		'''
 	
 		cpf = self.tela_login.lineEdit.text()
 
@@ -377,7 +377,7 @@ class Main(QMainWindow, Ui_main):
 		------------------
 		Cadastra funcionario criado um objeto do tipo Funcionario e
 		adiciona na lista de funcionario
-		''''
+		'''
 
 		nome = self.tela_cadastro_funcionario.lineEdit.text()
 		cpf = self.tela_cadastro_funcionario.lineEdit_2.text()
@@ -405,8 +405,7 @@ class Main(QMainWindow, Ui_main):
 		adiciona na lista de Pessoa
 		'''
 
-		Cadastra funcionario criado um objeto do tipo Funcionario e
-		adiciona na lista de funcionario
+		
 		nome = self.tela_cadastro_cliente.lineEdit.text()
 		cpf = self.tela_cadastro_cliente.lineEdit_2.text()
 		
