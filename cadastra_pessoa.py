@@ -8,7 +8,7 @@ class Pessoa:
 	Responsavel por receber as informações das pessoas que
 	serão cadastradas no sistema como, funcionários e clientes.
 	
-	Paramentros
+	Atributos
 	-----------
 	nome -> string
 	cpf -> string
