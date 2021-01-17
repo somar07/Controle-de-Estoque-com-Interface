@@ -1,6 +1,13 @@
 
 # cadastra cliente
 class Pessoa:
+
+	'''
+	class Pessoa()
+	---------------
+	Responsavel por conter as informações das pessoas que
+	serão cadastradas no sistema como, funcionários e clientes.
+	'''
 	
 	__slots__ = ['_nome', '_cpf'] 
 	
@@ -19,6 +26,18 @@ class Pessoa:
 	
 
 class Funcionario(Pessoa):
+
+	'''
+	class Funcionario()
+	-------------------
+	Responsavel por receber os dados dos funciários que serão
+	cadastrados no sistema.
+
+	Paramentros
+	-----------
+	Pessoa -> Pessoa()	
+
+	'''
 
 	__slots__ = ['_nome', '_cpf', '_salario'] 
 		
