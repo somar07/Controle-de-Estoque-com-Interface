@@ -1,4 +1,5 @@
 import sys
+import socket
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QListWidgetItem
@@ -23,6 +24,12 @@ from tela_excluir_produto import Tela_excluir_produto
 from cadastra_produtos import *
 from cadastra_pessoa import *
 from vendas import *
+
+address = 'localhost'
+port = 8003
+add = ((address,port))
+clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+clientSock.connect(add)
 
 class Ui_main(QtWidgets.QWidget):
 
@@ -278,7 +285,7 @@ class Main(QMainWindow, Ui_main):
 		salario = self.primeiro_acesso.lineEdit_3.text()
 
 		if(not(nome == '' or cpf == '' or salario == '')):
-			funcionario = Funcionario(nome, cpf, salario)
+			funcionario = Funcionario('cf',nome, cpf, salario)
 
 			if(self.cadastra_funcionario.cadastra(funcionario)):
 				QMessageBox.information(None, 'Cadastro', 'Cadastro realizado com sucesso!')
@@ -378,21 +385,26 @@ class Main(QMainWindow, Ui_main):
 		Cadastra funcionario criado um objeto do tipo Funcionario e
 		adiciona na lista de funcionario
 		'''
-
+		condicao = 'cf'
 		nome = self.tela_cadastro_funcionario.lineEdit.text()
 		cpf = self.tela_cadastro_funcionario.lineEdit_2.text()
 		salario = self.tela_cadastro_funcionario.lineEdit_3.text()
 		
 		if(not(nome == '' or cpf == '' or salario == '')):
-			funcionario = Funcionario(nome, cpf, salario)
+			funcionario = Funcionario(condicao, nome, cpf, salario)
 
-			if(self.cadastra_funcionario.cadastra(funcionario)):
-				QMessageBox.information(None, 'Cadastro', 'Cadastro realizado com sucesso')
-				self.tela_cadastro_funcionario.lineEdit.setText('')
-				self.tela_cadastro_funcionario.lineEdit_2.setText('')
-				self.tela_cadastro_funcionario.lineEdit_3.setText('')
-			else:
-				QMessageBox.information(None, 'Cadastro', 'CPF informado já cadastrado')
+			listaParaGerarCsv = []
+			lista = []
+			lista.append(funcionario.condicao)
+			lista.append(funcionario.nome)
+			lista.append(funcionario.cpf)
+			lista.append(funcionario.salario)
+
+			listaParaGerarCsv.append(lista)
+			for line in listaParaGerarCsv:
+				clientSock.sendto(repr(line).encode('utf-8'),(address, port))
+			clientSock.close()
+			
 		else:
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 	
@@ -405,19 +417,23 @@ class Main(QMainWindow, Ui_main):
 		adiciona na lista de Pessoa
 		'''
 
-		
+		condicao = 'cc'
 		nome = self.tela_cadastro_cliente.lineEdit.text()
 		cpf = self.tela_cadastro_cliente.lineEdit_2.text()
 		
 		if(not(nome == '' or cpf == '')):
 			cliente = Pessoa(nome, cpf)
+			cliente.condicao = condicao
+			listaParaGerarCsv = []
+			lista = []
+			lista.append(cliente.condicao)
+			lista.append(cliente.nome)
+			lista.append(cliente.cpf)
 
-			if(self.cadastra_cliente.cadastra(cliente)):
-				QMessageBox.information(None, 'Cadastro', 'Cadastro realizado com sucesso')
-				self.tela_cadastro_cliente.lineEdit.setText('')
-				self.tela_cadastro_cliente.lineEdit_2.setText('')
-			else:
-				QMessageBox.information(None, 'Cadastro', 'CPF informado já cadastrado')
+			listaParaGerarCsv.append(lista)
+			for line in listaParaGerarCsv:
+				clientSock.sendto(repr(line).encode('utf-8'),(address, port))
+			clientSock.close()
 		else:
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 	
@@ -428,7 +444,7 @@ class Main(QMainWindow, Ui_main):
 		Cadastra Produto criado um objeto do tipo Produto e
 		adiciona na lista de Produto
 		'''
-
+		condicao = 'cp'
 		codigo = self.tela_cadastro_produto.lineEdit.text()
 		nome = self.tela_cadastro_produto.lineEdit_2.text()
 		valor = self.tela_cadastro_produto.lineEdit_3.text()
@@ -437,16 +453,27 @@ class Main(QMainWindow, Ui_main):
 		if(not(codigo == '' or nome == '' or valor == '' or quantidade == '')):
 			qtd = int(quantidade)
 			val = float(valor)
-			produto = Produto(codigo, nome, val, qtd)
+			produto = Produto(condicao,codigo, nome, val, qtd)
+			listaParaGerarCsv = []
+			lista = []
+			lista.append(produto.condicao)
+			lista.append(produto.codigo)
+			lista.append(produto.nome)
+			lista.append(produto.valor)
+			lista.append(produto.quantidade)
 			
-			if(self.cadastra_produto.cadastra(produto)):
+			listaParaGerarCsv.append(lista)
+			for line in listaParaGerarCsv:
+				clientSock.sendto(repr(line).encode('utf-8'),(address,port))
+			recebe = clientSock.recv(1024).decode()
+			if(recebe == 'True'):
 				QMessageBox.information(None, 'Cadastro', 'Produto cadastrado com sucesso!')
 				self.tela_cadastro_produto.lineEdit.setText('')
 				self.tela_cadastro_produto.lineEdit_2.setText('')
 				self.tela_cadastro_produto.lineEdit_3.setText('')
 				self.tela_cadastro_produto.lineEdit_4.setText('')
 			else:
-				QMessageBox.information(None, 'Cadastro', 'Codigo informado já cadastrado!')
+				QMessageBox.information(None, 'Cadastro','Código informado já cadastrado!')
 		else:
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 
@@ -670,7 +697,16 @@ class Main(QMainWindow, Ui_main):
 		else:
 			QMessageBox.information(None, 'Excluir', 'Campo obrigatório!')
 
+
+	def btnSair(self):
+		msg = ['sair']
+		clientSock.sendto(repr(msg[0]).encode('utf-8'),(address,port))
+
+
+
+
 if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    show_main = Main()
-    sys.exit(app.exec_())
+	app = QApplication(sys.argv)
+	show_main = Main()
+	sys.exit(app.exec_())
+	clientSock.close()
