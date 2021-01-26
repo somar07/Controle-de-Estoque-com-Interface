@@ -15,12 +15,21 @@ class Pessoa:
 	
 	'''
 	
-	__slots__ = ['_nome', '_cpf'] 
+	__slots__ = ['_condicao','_nome', '_cpf'] 
 	
 	def __init__(self, nome, cpf):
-		
+		self._condicao = None
 		self._nome = nome		
-		self._cpf = cpf		
+		self._cpf = cpf
+
+	@property
+	def condicao(self):
+		return self._condicao
+
+	@condicao.setter
+	def condicao(self,condicao):
+		self._condicao = condicao
+			
 		
 	@property
 	def nome(self):
@@ -51,11 +60,17 @@ class Funcionario(Pessoa):
 	
 	'''
 
-	__slots__ = ['_nome', '_cpf', '_salario'] 
+	__slots__ = ['_condicao','_nome', '_cpf', '_salario'] 
 		
-	def __init__(self, nome, cpf, salario):
+	def __init__(self, condicao, nome, cpf, salario):
 		super().__init__(nome, cpf)
+		self._condicao = condicao
 		self._salario = salario
+		
+
+	@property
+	def condicao(self):
+		return self._condicao
 
 	@property
 	def salario(self):
