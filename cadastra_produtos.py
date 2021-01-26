@@ -12,15 +12,19 @@ class Produto:
 	quantidade -> int
 	
 	'''
-	__slots__ = ['_codigo', '_nome', '_valor', '_quantidade']
+	__slots__ = ['_condicao','_codigo', '_nome', '_valor', '_quantidade']
 	
-	def __init__(self, codigo, nome, valor, quantidade):
+	def __init__(self, condicao, codigo, nome, valor, quantidade):
+		self._condicao = condicao
 		self._codigo = codigo
 		self._nome = nome
 		self._valor = valor
 		self._quantidade = quantidade
 
-
+	@property
+	def condicao(self):
+		return self._condicao
+	
 	@property
 	def codigo(self):
 		return self._codigo
