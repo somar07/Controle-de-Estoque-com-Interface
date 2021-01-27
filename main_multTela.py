@@ -26,7 +26,7 @@ from cadastra_pessoa import *
 from vendas import *
 
 address = 'localhost'
-port = 8003
+port = 8008
 add = ((address,port))
 clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientSock.connect(add)
