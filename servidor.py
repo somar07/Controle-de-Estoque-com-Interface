@@ -13,7 +13,7 @@ cadastra_funcionario = Cadastra_funcionario()
 
 
 address = 'localhost'
-port = 8003
+port = 8008
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.bind((address, port))
@@ -59,7 +59,8 @@ with open('cadastro.csv', 'w', newline='') as new_file:
 
                         else:
                             print('Nada por aqui...')
-            print(cadastra_produto.lista_produtos)
+            else:
+                exit()
         except:
             exit()
             
