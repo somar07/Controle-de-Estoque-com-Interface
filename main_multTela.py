@@ -1,5 +1,6 @@
 import sys
 import socket
+import ast
 
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMessageBox, QListWidgetItem
@@ -284,13 +285,13 @@ class Main(QMainWindow, Ui_main):
 		salario = self.primeiro_acesso.lineEdit_3.text()
 
 		if(not(nome == '' or cpf == '' or salario == '')):
-			funcionario = Funcionario('cf',nome, cpf, salario)
+			
 			listaParaGerarCsv = []
 			lista = []
-			lista.append(funcionario.condicao)
-			lista.append(funcionario.nome)
-			lista.append(funcionario.cpf)
-			lista.append(funcionario.salario)
+			lista.append('cf')
+			lista.append(nome)
+			lista.append(cpf)
+			lista.append(salario)
 
 			listaParaGerarCsv.append(lista)
 			for line in listaParaGerarCsv:
@@ -406,14 +407,13 @@ class Main(QMainWindow, Ui_main):
 		salario = self.tela_cadastro_funcionario.lineEdit_3.text()
 		
 		if(not(nome == '' or cpf == '' or salario == '')):
-			funcionario = Funcionario(condicao, nome, cpf, salario)
 
 			listaParaGerarCsv = []
 			lista = []
-			lista.append(funcionario.condicao)
-			lista.append(funcionario.nome)
-			lista.append(funcionario.cpf)
-			lista.append(funcionario.salario)
+			lista.append(condicao)
+			lista.append(nome)
+			lista.append(cpf)
+			lista.append(salario)
 
 			listaParaGerarCsv.append(lista)
 			for line in listaParaGerarCsv:
@@ -443,13 +443,12 @@ class Main(QMainWindow, Ui_main):
 		cpf = self.tela_cadastro_cliente.lineEdit_2.text()
 		
 		if(not(nome == '' or cpf == '')):
-			cliente = Pessoa(nome, cpf)
-			cliente.condicao = condicao
+			
 			listaParaGerarCsv = []
 			lista = []
-			lista.append(cliente.condicao)
-			lista.append(cliente.nome)
-			lista.append(cliente.cpf)
+			lista.append(condicao)
+			lista.append(nome)
+			lista.append(cpf)
 
 			listaParaGerarCsv.append(lista)
 			
@@ -480,14 +479,13 @@ class Main(QMainWindow, Ui_main):
 		if(not(codigo == '' or nome == '' or valor == '' or quantidade == '')):
 			qtd = int(quantidade)
 			val = float(valor)
-			produto = Produto(condicao,codigo, nome, val, qtd)
 			listaParaGerarCsv = []
 			lista = []
-			lista.append(produto.condicao)
-			lista.append(produto.codigo)
-			lista.append(produto.nome)
-			lista.append(produto.valor)
-			lista.append(produto.quantidade)
+			lista.append(condicao)
+			lista.append(codigo)
+			lista.append(nome)
+			lista.append(valor)
+			lista.append(quantidade)
 			
 			listaParaGerarCsv.append(lista)
 			for line in listaParaGerarCsv:
@@ -506,9 +504,8 @@ class Main(QMainWindow, Ui_main):
 
 	def btnListFunc(self):
 		self.QtStack.setCurrentIndex(10)
-
-		for qtd, func in  enumerate(self.cadastra_funcionario.lista_pessoas):
-			info = "Funcionario: {}\nNome: {}\nCPF: {}\nSalario: {}\n".format(qtd+1, func.nome, func.cpf, func.salario)
+		for qtd,func in enumerate(self.cadastra_funcionario.lista_pessoas):
+			info = "Funcionario: {}\nNome: {}\nCPF: {}\nSalario: {}\n".format(qtd+1,func.nome, func.cpf, func.salario)
 			self.tela_listDados.listWidget.addItem(info)
 
 	def btnListCli(self):
@@ -723,12 +720,6 @@ class Main(QMainWindow, Ui_main):
 				QMessageBox.information(None,'Excluir', 'Produto não encontrado!')
 		else:
 			QMessageBox.information(None, 'Excluir', 'Campo obrigatório!')
-
-
-	def btnSair(self):
-		msg = ['sair']
-		clientSock.sendto(repr(msg[0]).encode('utf-8'),(address,port))
-
 
 
 

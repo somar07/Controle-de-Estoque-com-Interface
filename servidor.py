@@ -40,13 +40,10 @@ with open('cadastro.csv', 'w', newline='') as new_file:
     
     csv_writer = csv.writer(new_file)
     while(dado != []):
-        print('passei aqui\n')
         try: 
             data, addr = con.recvfrom(1024)
             dado = ast.literal_eval(data.decode('utf-8'))
-            print("passei aqui 0\n")
             if(dado[0] != 'sair'):
-                print("Passei aqui 1\n")
                 csv_writer.writerow(dado)
 
                 if(dado[0] == 'cc' or dado[0] == 'cf' or dado[0] == 'cp'):
@@ -54,9 +51,7 @@ with open('cadastro.csv', 'w', newline='') as new_file:
                     con.send(enviar.encode())
 
                 if(dado[0] == 'b'):
-                    print("Passei aqui busca 1")
                     existe = cadastra_funcionario.busca(dado[1])
-                    print("Passei aqui busca 2")
                     if(existe != None):
                         enviar = 'True'
                         con.send(enviar.encode())
@@ -64,17 +59,16 @@ with open('cadastro.csv', 'w', newline='') as new_file:
                     else:
                         enviar = 'False'
                         con.send(enviar.encode())
-                        
         except ValueError as e:
-            print(e)
+            print("Servidor Encerrado!")
             sock.close()
             exit()
         except IndexError as e:
-            print(e)
+            print("Servidor Encerrado!")
             sock.close()
             exit()
         except Exception as e:
-            print(e)
+            print("Servidor Encerrado!")
             sock.close()
             exit()
     sock.close()
