@@ -26,7 +26,7 @@ from cadastra_pessoa import *
 from vendas import *
 
 address = 'localhost'
-port = 8008
+port = 9004
 add = ((address,port))
 clientSock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 clientSock.connect(add)
@@ -189,7 +189,6 @@ class Main(QMainWindow, Ui_main):
 
 		# cadastro de produto
 		self.cadastra_produto = Cadastra_produto()
-
 		
 		self.qtdAux = []
 		
@@ -286,13 +285,25 @@ class Main(QMainWindow, Ui_main):
 
 		if(not(nome == '' or cpf == '' or salario == '')):
 			funcionario = Funcionario('cf',nome, cpf, salario)
+			listaParaGerarCsv = []
+			lista = []
+			lista.append(funcionario.condicao)
+			lista.append(funcionario.nome)
+			lista.append(funcionario.cpf)
+			lista.append(funcionario.salario)
 
-			if(self.cadastra_funcionario.cadastra(funcionario)):
-				QMessageBox.information(None, 'Cadastro', 'Cadastro realizado com sucesso!')
+			listaParaGerarCsv.append(lista)
+			for line in listaParaGerarCsv:
+				clientSock.sendto(repr(line).encode('utf-8'),(address, port))
+			recebe = clientSock.recv(1024).decode()
+			if(recebe == 'True'):
+				QMessageBox.information(None, 'Cadastro', 'Funcionário cadastrado com sucesso!')
+				self.primeiro_acesso.lineEdit.setText('')
+				self.primeiro_acesso.lineEdit_2.setText('')
+				self.primeiro_acesso.lineEdit_3.setText('')
 				self.QtStack.setCurrentIndex(1)
 			else:
-				QMessageBox.information(None, 'Cadastro', 'CPF informado já cadastrado')
-
+				QMessageBox.information(None, 'Cadastro','Cpf informado, já cadastrado!')
 		else:
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 
@@ -311,10 +322,14 @@ class Main(QMainWindow, Ui_main):
 
 
 		if(not(cpf == '')):
-			exite = self.cadastra_funcionario.busca(cpf)
-
+			dado = ['b',cpf]
+			listaParaGerarCsv = []
+			listaParaGerarCsv.append(dado)
+			for line in listaParaGerarCsv:
+				clientSock.sendto(repr(line).encode('utf-8'),(address, port))
+			existe = clientSock.recv(1024).decode()
 			# tela funcionario
-			if(exite != None):
+			if(existe == 'True'):
 				self.QtStack.setCurrentIndex(3)
 				self.tela_login.lineEdit.setText('')
 			else:
@@ -403,8 +418,14 @@ class Main(QMainWindow, Ui_main):
 			listaParaGerarCsv.append(lista)
 			for line in listaParaGerarCsv:
 				clientSock.sendto(repr(line).encode('utf-8'),(address, port))
-			clientSock.close()
-			
+			recebe = clientSock.recv(1024).decode()
+			if(recebe == 'True'):
+				QMessageBox.information(None, 'Cadastro', 'Funcionário cadastrado com sucesso!')
+				self.tela_cadastro_funcionario.lineEdit.setText('')
+				self.tela_cadastro_funcionario.lineEdit_2.setText('')
+				self.tela_cadastro_funcionario.lineEdit_3.setText('')
+			else:
+				QMessageBox.information(None, 'Cadastro','Cpf informado, já cadastrado!')
 		else:
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 	
@@ -431,9 +452,15 @@ class Main(QMainWindow, Ui_main):
 			lista.append(cliente.cpf)
 
 			listaParaGerarCsv.append(lista)
-			for line in listaParaGerarCsv:
-				clientSock.sendto(repr(line).encode('utf-8'),(address, port))
-			clientSock.close()
+			
+			clientSock.sendto(repr(listaParaGerarCsv[0]).encode('utf-8'),(address, port))
+			recebe = clientSock.recv(1024).decode()
+			if(recebe == 'True'):
+				QMessageBox.information(None, 'Cadastro', 'Cliente cadastrado com sucesso!')
+				self.tela_cadastro_cliente.lineEdit.setText('')
+				self.tela_cadastro_cliente.lineEdit_2.setText('')
+			else:
+				QMessageBox.information(None, 'Cadastro', 'Cpf informado, já cadastrado!')
 		else:
 			QMessageBox.information(None, 'Cadastro', 'Informe todos os dados')
 	
