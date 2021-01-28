@@ -10,60 +10,78 @@ cadastra_produto = Cadastra_produto()
 cadastra_cliente = Cadastra_pessoa()
 cadastra_funcionario = Cadastra_funcionario()
 
+def cadastros(lista):
+    enviar = 'False'
+    if(lista[0] == 'cc'):
+        cliente = Pessoa(lista[1],lista[2])
+        if(cadastra_cliente.cadastra(cliente)):
+            enviar = 'True'  
+    if(lista[0] == 'cf'):
+        funcionario = Funcionario(lista[0],lista[1],lista[2],float(lista[3]))
+        if(cadastra_funcionario.cadastra(funcionario)):
+            enviar = 'True'                                        
+    if(lista[0] == 'cp'):
+        produto = Produto(lista[0],lista[1],lista[2],float(lista[3]),float(lista[4]))
+        if(cadastra_produto.cadastra(produto)):
+            enviar = 'True'    
+    return enviar
 
 
 address = 'localhost'
-port = 8008
+port = 9004
 sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 sock.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
 sock.bind((address, port))
 sock.listen(10)
 
 con, cliente = sock.accept()
-
+dado = ['start']
 with open('cadastro.csv', 'w', newline='') as new_file:
+    
     csv_writer = csv.writer(new_file)
-    data, addr = con.recvfrom(1024)
+    while(dado != []):
+        print('passei aqui\n')
+        try: 
+            data, addr = con.recvfrom(1024)
+            dado = ast.literal_eval(data.decode('utf-8'))
+            print("passei aqui 0\n")
+            if(dado[0] != 'sair'):
+                print("Passei aqui 1\n")
+                csv_writer.writerow(dado)
 
-    while True:
-        try:
-            if(data):
-                csv_writer.writerow(ast.literal_eval(data.decode('utf-8')))
-            
-            
-                with open('cadastro.csv','r') as file:
-                    file_csv = file.readlines()
+                if(dado[0] == 'cc' or dado[0] == 'cf' or dado[0] == 'cp'):
+                    enviar = cadastros(dado)
+                    con.send(enviar.encode())
 
-                    for line in file_csv:
-                        if(line.startswith('cc')):
-                            listaDados = line.split(',')
-                            cliente = Pessoa(listaDados[0],listaDados[1])
-                            cadastra_cliente.cadastra(cliente)
-                            print('Cliente Cadastrado!')
-                            
-                        elif(line.startswith('cf')):
-                            listaDados = line.split(',')
-                            funcionario = Funcionario(listaDados[0],listaDados[1],listaDados[2],float(listaDados[3]))
-                            cadastra_funcionario.cadastra(funcionario)
-                            print('Funcionario Cadastrado!')
-
-                        elif(line.startswith('cp')):
-                            listaDados = line.split(',')
-                            produto = Produto(listaDados[0],listaDados[1],listaDados[2],float(listaDados[3]),float(listaDados[4]))
-                            if(cadastra_produto.cadastra(produto)):
-                                enviar = 'True'
-                                con.send(enviar.encode())
-                            else:
-                                enviar = 'False'
-                                con.send(enviar.encode())
-
-                        else:
-                            print('Nada por aqui...')
-            else:
-                exit()
-        except:
+                if(dado[0] == 'b'):
+                    print("Passei aqui busca 1")
+                    existe = cadastra_funcionario.busca(dado[1])
+                    print("Passei aqui busca 2")
+                    if(existe != None):
+                        enviar = 'True'
+                        con.send(enviar.encode())
+                        
+                    else:
+                        enviar = 'False'
+                        con.send(enviar.encode())
+                        
+        except ValueError as e:
+            print(e)
+            sock.close()
             exit()
-            
+        except IndexError as e:
+            print(e)
+            sock.close()
+            exit()
+        except Exception as e:
+            print(e)
+            sock.close()
+            exit()
+    sock.close()
         
+            
+new_file.close()
 
-sock.close()
+
+
+
